@@ -1,6 +1,6 @@
 import subprocess
 from os import path
-from .config.config import FlowConfig
+from .config import FlowConfig
 
 def _call_tool(tool: str, args: list[str], env: dict | None):
 	subprocess.run([tool, *args], env=env)

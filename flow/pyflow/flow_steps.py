@@ -2,7 +2,7 @@ from os import makedirs, path
 import re
 
 from .call_tool import call_yosys_script, call_util_script
-from .config.config import FlowConfig
+from .config import FlowConfig
 
 def preprocess(config: FlowConfig):
 	# Mark libraries as dont use
