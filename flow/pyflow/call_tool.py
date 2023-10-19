@@ -6,7 +6,6 @@ def _call_tool(tool: str, args: list[str], env: dict | None):
 	subprocess.run([tool, *args], env=env)
 
 def _call_yosys(args: list[str], logfile: str, config: FlowConfig):
-	print(config.get_env())
 	_call_tool(
 		config.get('YOSYS_CMD'),
 		['-v', '3', *args],
@@ -20,5 +19,12 @@ def call_util_script(script: str, config: FlowConfig, args: list[str]):
 	_call_tool(
 		path.join(config.get('UTILS_DIR'), script),
 		args,
+		config.get_env()
+	)
+
+def _call_openroad(args: list[str], logfile: str, config: FlowConfig):
+	_call_tool(
+		config.get('OPENROAD_CMD'),
+		['-no_init', *args],
 		config.get_env()
 	)

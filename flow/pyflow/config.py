@@ -32,7 +32,7 @@ class _FlowConfigDict(TypedDict):
 	# TOOL COMMANDS
 	YOSYS_CMD: str
 	"""Path to the the Yosys executable. Default: `/usr/bin/yosys`"""
-	OPENROAD_CMD: str
+	OPENROAD_EXE: str
 	"""Path to the OpenROAD executable. Default: `/usr/bin/openroad`"""
 	KLAYOUT_CMD: str
 	"""Path to the Klayout executable. Default: `/usr/bin/klayout`"""
@@ -117,7 +117,7 @@ class _FlowEnv(TypedDict):
 
 	# TOOL COMMANDS
 	YOSYS_CMD: str
-	OPENROAD_CMD: str
+	OPENROAD_EXE: str
 	KLAYOUT_CMD: str
 
 	# PLATFORM CONFIG
@@ -166,7 +166,7 @@ class FlowConfig():
 
 			# Tool commands
 			'YOSYS_CMD': configopts.get('YOSYS_CMD', '/usr/bin/yosys'),
-			'OPENROAD_CMD': configopts.get('OPENROAD_CMD', '/usr/bin/openroad'),
+			'OPENROAD_EXE': configopts.get('OPENROAD_EXE', '/usr/bin/openroad'),
 			'KLAYOUT_CMD': configopts.get('KLAYOUT_CMD', '/usr/bin/klayout'),
 
 			# Platform config
