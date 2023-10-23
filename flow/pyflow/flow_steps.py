@@ -1,4 +1,5 @@
 from os import makedirs, path
+from shutil import copyfile
 import re
 
 from .call_tool import call_yosys_script, call_util_script
@@ -41,9 +42,16 @@ def synth(config: FlowConfig):
 	makedirs(config.get('REPORTS_DIR'), exist_ok = True)
 	makedirs(config.get('LOG_DIR'), exist_ok = True)
 
+	SYNTH_OUTPUT_FILE = path.join(config.get('RESULTS_DIR'), '1_1_yosys.v')
+	SYNTH_LOG_FILE = path.join(config.get('LOG_DIR'), '1_1_yosys.log')
+
 	call_yosys_script(
 		'synth',
-		logfile=path.join(config.get('LOG_DIR'), '1_1_yosys.log'),
+		logfile=SYNTH_LOG_FILE,
 		args=[],
 		config=config
 	)
+
+	# Copy results
+	copyfile(SYNTH_OUTPUT_FILE, path.join(config.get('RESULTS_DIR'), '1_synth.v'))
+	copyfile(config.get('SDC_FILE'), path.join(config.get('RESULTS_DIR'), '1_synth.sdc'))
