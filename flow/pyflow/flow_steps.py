@@ -43,7 +43,7 @@ def synth(config: FlowConfig):
 
 	call_yosys_script(
 		'synth',
-		logfile='test.log',
+		logfile=path.join(config.get('LOG_DIR'), '1_1_yosys.log'),
 		args=[],
 		config=config
 	)
