@@ -7,7 +7,7 @@ gcd_config = FlowConfig({
 	'DESIGN_NAME': 'gcd',
 	'PLATFORM': 'sky130hd',
 	'VERILOG_FILES': [path.join('designs', 'src', 'gcd', 'gcd.v')],
-	'YOSYS_CMD': '/usr/bin/miniconda3/bin/yosys',
+	'YOSYS_CMD': '/usr/local/bin/yosys',
 	'OPENROAD_CMD': 'openroad',
 	'KLAYOUT_CMD': 'klayout',
 	'PROCESS': 130,
