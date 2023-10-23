@@ -56,14 +56,12 @@ class _FlowConfigDict(TypedDict):
 	"""Standard cell Liberty files marked as dont use."""
 	FILL_CELLS: list[str]
 	"""List of fill cells. Fill cells are used to fill empty sites."""
-	PDN_TCL: str
-	"""File path which has a set of power grid policies used by `pdn` to be applied to the design, such as layers to use, stripe width and spacing to generate the actual metal straps. Default: `[platform_dir]/pdn.tcl`"""
-	TAPCELL_TCL: str
-	"""Path to Endcap and Welltie cells file. Default: `[platform_dir]/tapcell.tcl`"""
 	CDL_FILE: str
 	"""Path to the platform CDL file. """
 	KLAYOUT_LVS_FILE: str
 	"""Path to the platform LVS file used in Klayout."""
+
+	### SYNTHESIS ###
 	ABC_DRIVER_CELL: str
 	"""Default driver cell used during ABC synthesis."""
 	ABC_LOAD_IN_FF: float
@@ -80,6 +78,22 @@ class _FlowConfigDict(TypedDict):
 	"""The path to a Verilog file with a list of cells for gating clock treated as a black box by Yosys."""
 	ADDER_MAP_FILE: str
 	"""The path to a Verilog file with a list of adders treated as a black box by Yosys."""
+	### /SYNTHESIS ###
+
+	### FLOORPLAN ###
+	PLACE_SITE: str
+	"""Placement site for core cells. This can be found in the technology lef"""
+	IO_PLACER_H: str
+	"""IO Placer pin layers."""
+	IO_PLACER_V: str
+	"""IO Placer pin layers."""
+	PDN_TCL: str
+	"""File path which has a set of power grid policies used by `pdn` to be applied to the design, such as layers to use, stripe width and spacing to generate the actual metal straps. Default: `[platform_dir]/pdn.tcl`"""
+	TAPCELL_TCL: str
+	"""Path to Endcap and Welltie cells file. Default: `[platform_dir]/tapcell.tcl`"""
+	MACRO_PLACE_HALO: tuple[float, float]
+	MACRO_PLACE_CHANNEL: tuple[float, float]
+	### /FLOORPLAN ###
 
 	# DESIGN CONFIG
 	DESIGN_NAME: str
@@ -98,61 +112,6 @@ class _FlowConfigDict(TypedDict):
 	# SYNTHESIS CONFIG
 	SYNTH_ARGS: str
 	"""Optional synthesis variables for Yosys."""
-
-class _FlowEnv(TypedDict):
-	"""The environment variables used in the flow."""
-
-	# DIRECTORIES
-	FLOW_HOME: str
-	DESIGN_HOME: str
-	DESIGN_DIR: str
-	UTILS_DIR: str
-	SCRIPTS_DIR: str
-	PLATFORM_DIR: str
-	PLATFORM_HOME: str
-	RESULTS_DIR: str
-	LOG_DIR: str
-	REPORTS_DIR: str
-	OBJECTS_DIR: str
-
-	# TOOL COMMANDS
-	YOSYS_CMD: str
-	OPENROAD_EXE: str
-	KLAYOUT_CMD: str
-
-	# PLATFORM CONFIG
-	PROCESS: str
-	TECH_LEF: str
-	SC_LEF: str
-	LIB_FILES: str
-	GDS_FILES: str
-	DONT_USE_CELLS: str
-	DONT_USE_LIBS: str
-	DONT_USE_SC_LIB: str
-	FILL_CELLS: str
-	PDN_TCL: str
-	TAPCELL_TCL: str
-	CDL_FILE: str
-	KLAYOUT_LVS_FILE: str
-	ABC_DRIVER_CELL: str
-	ABC_LOAD_IN_FF: str
-	TIEHI_CELL_AND_PORT: str
-	TIELO_CELL_AND_PORT: str
-	MIN_BUF_CELL_AND_PORTS: str
-	LATCH_MAP_FILE: str
-	CLKGATE_MAP_FILE: str
-	ADDER_MAP_FILE: str
-
-	# DESIGN CONFIG
-	DESIGN_NAME: str
-	PLATFORM: str
-	VERILOG_FILES: str
-	SDC_FILE: str
-	ABC_AREA: str
-	ABC_CLOCK_PERIOD_IN_PS: str
-
-	# SYNTHESIS CONFIG
-	SYNTH_ARGS: str
 
 class FlowConfig():
 	config: _FlowConfigDict
@@ -206,11 +165,11 @@ class FlowConfig():
 	def set(self, key, value):
 		self.config[key] = value
 
-	def get_env(self) -> _FlowEnv:
+	def get_env(self):
 		"""Returns the corresponding environment variables for the given configuration."""
 
 		# Import default string variables
-		env_vars: _FlowEnv = {**self.config}
+		env_vars = {**self.config}
 
 		# Convert others to string
 		env_vars['PROCESS'] = str(self.config['PROCESS'])
@@ -227,5 +186,9 @@ class FlowConfig():
 		env_vars['VERILOG_FILES'] = ' '.join(self.config['VERILOG_FILES'])
 		env_vars['ABC_AREA'] = str(int(self.config['ABC_AREA']))
 		env_vars['ABC_CLOCK_PERIOD_IN_PS'] = str(self.config['ABC_CLOCK_PERIOD_IN_PS'])
+		env_vars['IO_PLACER_H'] = self.config['IO_PLACER_H']
+		env_vars['IO_PLACER_V'] = self.config['IO_PLACER_V']
+		env_vars['MACRO_PLACE_HALO'] = f"{self.config['MACRO_PLACE_HALO'][0]} {self.config['MACRO_PLACE_HALO'][1]}"
+		env_vars['MACRO_PLACE_CHANNEL'] = f"{self.config['MACRO_PLACE_CHANNEL'][0]} {self.config['MACRO_PLACE_CHANNEL'][1]}"
 
 		return env_vars
