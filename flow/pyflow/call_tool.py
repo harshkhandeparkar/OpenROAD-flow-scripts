@@ -1,6 +1,6 @@
 import subprocess
 from os import path
-from .config import FlowConfig
+from .config.config import FlowConfig
 
 def _call_tool(tool: str, args: list[str], env: dict | None, logfile: str | None):
 	if logfile:

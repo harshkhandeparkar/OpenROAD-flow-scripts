@@ -3,7 +3,7 @@ from shutil import copyfile
 import re
 
 from .call_tool import call_yosys_script, call_util_script
-from .config import FlowConfig
+from .config.config import FlowConfig
 
 def preprocess(config: FlowConfig):
 	# Mark libraries as dont use

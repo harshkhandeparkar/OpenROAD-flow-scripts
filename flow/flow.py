@@ -1,6 +1,6 @@
 from os import path
 
-from pyflow.config import FlowConfig
+from pyflow.config.config import FlowConfig
 from pyflow.flow_steps import preprocess, synth
 
 gcd_config = FlowConfig({
