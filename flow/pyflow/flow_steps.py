@@ -2,10 +2,12 @@ from os import makedirs, path
 from shutil import copyfile
 import re
 
-from .call_tool import call_yosys_script, call_util_script
+from .call_tool import call_yosys_script, call_util_script, do_openroad_step
 from .config.config import FlowConfig
 
 def preprocess(config: FlowConfig):
+	print("STARTING PREPROCESSING.")
+
 	# Mark libraries as dont use
 	makedirs(path.join(config.get('OBJECTS_DIR'), 'lib'), exist_ok = True)
 	dont_use_libs = []
@@ -35,9 +37,13 @@ def preprocess(config: FlowConfig):
 		if len(clk_period_matches.groups()) > 0:
 			config.set('ABC_CLOCK_PERIOD_IN_PS', float(clk_period_matches.group(1)))
 
+	print("PREPROCESSING COMPLETED SUCCESFULLY.")
+
 	return config
 
 def synth(config: FlowConfig):
+	print("STARTING SYNTHESIS.")
+
 	makedirs(config.get('RESULTS_DIR'), exist_ok = True)
 	makedirs(config.get('REPORTS_DIR'), exist_ok = True)
 	makedirs(config.get('LOG_DIR'), exist_ok = True)
@@ -55,3 +61,15 @@ def synth(config: FlowConfig):
 	# Copy results
 	copyfile(SYNTH_OUTPUT_FILE, path.join(config.get('RESULTS_DIR'), '1_synth.v'))
 	copyfile(config.get('SDC_FILE'), path.join(config.get('RESULTS_DIR'), '1_synth.sdc'))
+
+	print("SYNTHESIS COMPLETED SUCCESFULLY.")
+
+def floorplan(config: FlowConfig):
+	print("STARTING FLOORPLANNING.")
+
+	makedirs(config.get('RESULTS_DIR'), exist_ok = True)
+	makedirs(config.get('LOG_DIR'), exist_ok = True)
+
+	do_openroad_step('2_1_floorplan', 'floorplan', config)
+
+	print("FLOORPLANNING COMPLETED SUCCESFULLY.")

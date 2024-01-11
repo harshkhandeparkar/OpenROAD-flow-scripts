@@ -86,5 +86,6 @@ class FlowConfig():
 		env_vars['IO_PLACER_V'] = self.config['IO_PLACER_V']
 		env_vars['MACRO_PLACE_HALO'] = f"{self.config['MACRO_PLACE_HALO'][0]} {self.config['MACRO_PLACE_HALO'][1]}"
 		env_vars['MACRO_PLACE_CHANNEL'] = f"{self.config['MACRO_PLACE_CHANNEL'][0]} {self.config['MACRO_PLACE_CHANNEL'][1]}"
+		env_vars['CORE_UTILIZATION'] = f"{self.config['CORE_UTILIZATION']}"
 
 		return env_vars

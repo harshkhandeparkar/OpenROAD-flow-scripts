@@ -29,6 +29,7 @@ SKY130HD_PLATFORM_CONFIG: FlowPlatformConfig = {
 	'ADDER_MAP_FILE': '',
 
 	# Floorplan config
+	'PLACE_SITE': 'unithd',
 	'IO_PLACER_H': 'met3',
 	'IO_PLACER_V': 'met2',
 	'TAPCELL_TCL': path.join(PLATFORM_DIR, 'tapcell.tcl'),

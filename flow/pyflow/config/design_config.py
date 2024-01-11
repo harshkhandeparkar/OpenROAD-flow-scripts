@@ -22,5 +22,6 @@ class __DesignSynthConfig(TypedDict):
 
 class __DesignFloorplanConfig(TypedDict):
 	"""The floorplan design configuration."""
+	CORE_UTILIZATION: float
 
 FlowDesignConfig = Union[__DesignCommonConfig, __DesignSynthConfig, __DesignFloorplanConfig]
