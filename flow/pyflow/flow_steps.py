@@ -70,6 +70,17 @@ def floorplan(config: FlowConfig):
 	makedirs(config.get('RESULTS_DIR'), exist_ok = True)
 	makedirs(config.get('LOG_DIR'), exist_ok = True)
 
+	# STEP 1: Translate verilog to odb
 	do_openroad_step('2_1_floorplan', 'floorplan', config)
+	# STEP 2: IO Placement (random)
+	do_openroad_step('2_2_floorplan_io', 'io_placement_random', config)
+	# STEP 3: Timing Driven Mixed Sized Placement
+	do_openroad_step('2_3_floorplan_tdms', 'tdms_place', config)
+	# STEP 4: Macro Placement
+	do_openroad_step('2_4_floorplan_macro', 'macro_place', config)
+	# STEP 5: Tapcell and Welltie insertion
+	do_openroad_step('2_5_floorplan_tapcell', 'tapcell', config)
+	# STEP 6: PDN generation
+	do_openroad_step('2_6_floorplan_pdn', 'pdn', config)
 
 	print("FLOORPLANNING COMPLETED SUCCESFULLY.")

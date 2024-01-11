@@ -12,7 +12,7 @@ gcd_config = FlowConfig({
 	'YOSYS_CMD': '/usr/bin/miniconda3/bin/yosys',
 	'OPENROAD_CMD': '/usr/bin/miniconda3/bin/openroad',
 	'KLAYOUT_CMD': 'klayout',
-	'PRESERVE_CELLS': ['gcd', 'GcdUnitDpathRTL_0x4d0fc71ead8d3d9e', 'GcdUnitCtrlRTL_0x4d0fc71ead8d3d9e'],
+	# 'PRESERVE_CELLS': ['gcd', 'GcdUnitDpathRTL_0x4d0fc71ead8d3d9e', 'GcdUnitCtrlRTL_0x4d0fc71ead8d3d9e'],
 	'CORE_UTILIZATION': 40
 })
 

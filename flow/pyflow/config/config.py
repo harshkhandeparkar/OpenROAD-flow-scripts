@@ -37,8 +37,9 @@ class FlowConfig():
 			# Floorplan config
 			'DIE_AREA': configopts.get('DIE_AREA', []),
 			'CORE_AREA': configopts.get('CORE_AREA', []),
-			'CORE_ASPECT_RATIO': configopts.get('CORE_ASPECT_RATIO', 0),
-			'CORE_MARGIN': configopts.get('CORE_MARGIN', 0),
+			'CORE_ASPECT_RATIO': configopts.get('CORE_ASPECT_RATIO', None),
+			'CORE_MARGIN': configopts.get('CORE_MARGIN', None),
+			'PLACE_PINS_ARGS': configopts.get('PLACE_PINS_ARGS', '')
 		}
 
 		# Set defaults for directories (interdependent)
@@ -89,15 +90,13 @@ class FlowConfig():
 		env_vars['PRESERVE_CELLS'] = ' '.join(self.config['PRESERVE_CELLS'])
 		env_vars['ABC_AREA'] = str(int(self.config['ABC_AREA']))
 		env_vars['ABC_CLOCK_PERIOD_IN_PS'] = str(self.config['ABC_CLOCK_PERIOD_IN_PS'])
-		env_vars['IO_PLACER_H'] = self.config['IO_PLACER_H']
-		env_vars['IO_PLACER_V'] = self.config['IO_PLACER_V']
 		env_vars['MACRO_PLACE_HALO'] = f"{self.config['MACRO_PLACE_HALO'][0]} {self.config['MACRO_PLACE_HALO'][1]}"
 		env_vars['MACRO_PLACE_CHANNEL'] = f"{self.config['MACRO_PLACE_CHANNEL'][0]} {self.config['MACRO_PLACE_CHANNEL'][1]}"
 
 		env_vars['DIE_AREA'] = ' '.join(self.config.get('DIE_AREA'))
 		env_vars['CORE_AREA'] = ' '.join(self.config.get('CORE_AREA'))
-		env_vars['CORE_UTILIZATION'] = str(self.config['CORE_UTILIZATION'])
-		env_vars['CORE_ASPECT_RATIO'] = str(self.config['CORE_ASPECT_RATIO'])
-		env_vars['CORE_MARGIN'] = str(self.config['CORE_MARGIN'])
+		env_vars['CORE_UTILIZATION'] = str(self.config['CORE_UTILIZATION']) if self.config['CORE_UTILIZATION'] is not None else ""
+		env_vars['CORE_ASPECT_RATIO'] = str(self.config['CORE_ASPECT_RATIO']) if self.config['CORE_ASPECT_RATIO'] is not None else ""
+		env_vars['CORE_MARGIN'] = str(self.config['CORE_MARGIN']) if self.config['CORE_ASPECT_RATIO'] is not None else ""
 
 		return env_vars
