@@ -32,7 +32,13 @@ class FlowConfig():
 
 			# Synthesis config
 			'SYNTH_ARGS': configopts.get('SYNTH_ARGS', '-flatten'),
-			'PRESERVE_CELLS': configopts.get('PRESERVE_CELLS', [])
+			'PRESERVE_CELLS': configopts.get('PRESERVE_CELLS', []),
+
+			# Floorplan config
+			'DIE_AREA': configopts.get('DIE_AREA', []),
+			'CORE_AREA': configopts.get('CORE_AREA', []),
+			'CORE_ASPECT_RATIO': configopts.get('CORE_ASPECT_RATIO', 0),
+			'CORE_MARGIN': configopts.get('CORE_MARGIN', 0),
 		}
 
 		# Set defaults for directories (interdependent)
@@ -74,6 +80,7 @@ class FlowConfig():
 		env_vars['DONT_USE_LIBS'] = ' '.join(self.config['DONT_USE_LIBS'])
 		env_vars['DONT_USE_SC_LIB'] = ' '.join(self.config['DONT_USE_SC_LIB'])
 		env_vars['FILL_CELLS'] = ' '.join(self.config['FILL_CELLS'])
+
 		env_vars['ABC_LOAD_IN_FF'] = str(self.config['ABC_LOAD_IN_FF'])
 		env_vars['TIEHI_CELL_AND_PORT'] = ' '.join(self.config['TIEHI_CELL_AND_PORT'])
 		env_vars['TIELO_CELL_AND_PORT'] = ' '.join(self.config['TIELO_CELL_AND_PORT'])
@@ -86,6 +93,11 @@ class FlowConfig():
 		env_vars['IO_PLACER_V'] = self.config['IO_PLACER_V']
 		env_vars['MACRO_PLACE_HALO'] = f"{self.config['MACRO_PLACE_HALO'][0]} {self.config['MACRO_PLACE_HALO'][1]}"
 		env_vars['MACRO_PLACE_CHANNEL'] = f"{self.config['MACRO_PLACE_CHANNEL'][0]} {self.config['MACRO_PLACE_CHANNEL'][1]}"
-		env_vars['CORE_UTILIZATION'] = f"{self.config['CORE_UTILIZATION']}"
+
+		env_vars['DIE_AREA'] = ' '.join(self.config.get('DIE_AREA'))
+		env_vars['CORE_AREA'] = ' '.join(self.config.get('CORE_AREA'))
+		env_vars['CORE_UTILIZATION'] = str(self.config['CORE_UTILIZATION'])
+		env_vars['CORE_ASPECT_RATIO'] = str(self.config['CORE_ASPECT_RATIO'])
+		env_vars['CORE_MARGIN'] = str(self.config['CORE_MARGIN'])
 
 		return env_vars

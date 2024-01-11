@@ -49,6 +49,8 @@ class __PlatformFloorplanConfig(TypedDict):
 	"""The floorplan platform configuration."""
 	PLACE_SITE: str
 	"""Placement site for core cells. This can be found in the technology lef"""
+	MAKE_TRACKS: str
+	"""Tcl file that defines add routing tracks to a floorplan."""
 	IO_PLACER_H: str
 	"""The metal layer on which to place the I/O pins horizontally (top and bottom of the die)."""
 	IO_PLACER_V: str

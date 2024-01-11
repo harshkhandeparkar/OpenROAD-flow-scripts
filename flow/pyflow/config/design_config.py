@@ -22,6 +22,17 @@ class __DesignSynthConfig(TypedDict):
 
 class __DesignFloorplanConfig(TypedDict):
 	"""The floorplan design configuration."""
+	FLOORPLAN_DEF: str
+	"""Use the DEF file to initialize floorplan."""
+	DIE_AREA: tuple[float, float, float, float]
+	"""The die area specified as a tuple of lower-left and upper-right corners in microns (X1,Y1,X2,Y2). This variable is ignored if `CORE_UTILIZATION` and `CORE_ASPECT_RATIO` are defined."""
+	CORE_AREA: tuple[float, float, float, float]
+	"""The core area specified as a tuple of lower-left and upper-right corners in microns (X1,Y1,X2,Y2). This variable is ignored if `CORE_UTILIZATION` and `CORE_ASPECT_RATIO` are defined."""
 	CORE_UTILIZATION: float
+	"""The core utilization percentage (0-100). Overrides `DIE_AREA` and `CORE_AREA`."""
+	CORE_ASPECT_RATIO: float
+	"""The core aspect ratio (height / width). This values is ignored if `CORE_UTILIZATION` undefined."""
+	CORE_MARGIN: int
+	"""The margin between the core area and die area, in multiples of SITE heights. The margin is applied to each side. This variable is ignored if `CORE_UTILIZATION` is undefined."""
 
 FlowDesignConfig = Union[__DesignCommonConfig, __DesignSynthConfig, __DesignFloorplanConfig]
