@@ -17,8 +17,10 @@ class __DesignCommonConfig(TypedDict):
 
 class __DesignSynthConfig(TypedDict):
 	"""The synthesis design configuration."""
+	PRESERVE_CELLS: list[str]
+	"""The list of cells to preserve the hierarchy of during synthesis.s"""
 
 class __DesignFloorplanConfig(TypedDict):
 	"""The floorplan design configuration."""
 
-_FlowDesignConfig = Union[__DesignCommonConfig, __DesignSynthConfig, __DesignFloorplanConfig]
+FlowDesignConfig = Union[__DesignCommonConfig, __DesignSynthConfig, __DesignFloorplanConfig]

@@ -62,4 +62,4 @@ class __PlatformFloorplanConfig(TypedDict):
 	MACRO_PLACE_CHANNEL: tuple[float, float]
 	"""Horizontal/vertical channel width between macros (microns). Used by automatic macro placement when `RTLMP_FLOW` is disabled."""
 
-_FlowPlatformConfig = Union[__PlatformCommonConfig, __PlatformSynthConfig, __PlatformFloorplanConfig]
+FlowPlatformConfig = Union[__PlatformCommonConfig, __PlatformSynthConfig, __PlatformFloorplanConfig]

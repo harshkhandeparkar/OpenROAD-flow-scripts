@@ -1,11 +1,11 @@
 from typing import Union
 from os import path
 
-from .platform_config import _FlowPlatformConfig
-from .design_config import _FlowDesignConfig
-from .common_config import _FlowCommonConfig
+from .platform_config import FlowPlatformConfig
+from .design_config import FlowDesignConfig
+from .common_config import FlowCommonConfig
 
-_FlowConfigDict = Union[_FlowCommonConfig, _FlowPlatformConfig, _FlowDesignConfig]
+_FlowConfigDict = Union[FlowCommonConfig, FlowPlatformConfig, FlowDesignConfig]
 
 class FlowConfig():
 	config: _FlowConfigDict
@@ -32,6 +32,7 @@ class FlowConfig():
 
 			# Synthesis config
 			'SYNTH_ARGS': configopts.get('SYNTH_ARGS', '-flatten'),
+			'PRESERVE_CELLS': configopts.get('PRESERVE_CELLS', [])
 		}
 
 		# Set defaults for directories (interdependent)
@@ -78,6 +79,7 @@ class FlowConfig():
 		env_vars['TIELO_CELL_AND_PORT'] = ' '.join(self.config['TIELO_CELL_AND_PORT'])
 		env_vars['MIN_BUF_CELL_AND_PORTS'] = ' '.join(self.config['MIN_BUF_CELL_AND_PORTS'])
 		env_vars['VERILOG_FILES'] = ' '.join(self.config['VERILOG_FILES'])
+		env_vars['PRESERVE_CELLS'] = ' '.join(self.config['PRESERVE_CELLS'])
 		env_vars['ABC_AREA'] = str(int(self.config['ABC_AREA']))
 		env_vars['ABC_CLOCK_PERIOD_IN_PS'] = str(self.config['ABC_CLOCK_PERIOD_IN_PS'])
 		env_vars['IO_PLACER_H'] = self.config['IO_PLACER_H']
