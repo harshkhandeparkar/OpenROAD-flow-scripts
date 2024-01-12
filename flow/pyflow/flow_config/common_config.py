@@ -60,17 +60,19 @@ class FlowCommonConfig:
 	def __init__(self, configopts: Union[FlowCommonConfigDict, dict]):
 		self.config = {**FLOW_COMMON_CONFIG_DEFAULTS, **configopts}
 
-		# Set defaults for directories (interdependent)
+		# Set defaults for static directories
 		self.config['DESIGN_HOME'] = self.config.get('DESIGN_HOME', path.join(self.config['FLOW_HOME'], 'designs'))
 		self.config['DESIGN_DIR'] = self.config.get('DESIGN_DIR', path.join(self.config['DESIGN_HOME'], self.config['PLATFORM'], self.config['DESIGN_NAME']))
 		self.config['UTILS_DIR'] = self.config.get('UTILS_DIR', path.join(self.config['FLOW_HOME'], 'util'))
 		self.config['SCRIPTS_DIR'] = self.config.get('SCRIPTS_DIR', path.join(self.config['FLOW_HOME'], 'scripts'))
 		self.config['PLATFORM_HOME'] = self.config.get('PLATFORM_HOME', path.join(self.config['FLOW_HOME'], 'platforms'))
 		self.config['PLATFORM_DIR'] = self.config.get('PLATFORM_DIR', path.join(self.config['PLATFORM_HOME'], self.config['PLATFORM']))
-		self.config['RESULTS_DIR'] = self.config.get('RESULTS_DIR', path.join(self.config['FLOW_HOME'], 'results', self.config['PLATFORM'], self.config['DESIGN_NAME']))
-		self.config['LOG_DIR'] = self.config.get('LOG_DIR', path.join(self.config['FLOW_HOME'], 'logs', self.config['PLATFORM'], self.config['DESIGN_NAME']))
-		self.config['REPORTS_DIR'] = self.config.get('REPORTS_DIR', path.join(self.config['FLOW_HOME'], 'reports', self.config['PLATFORM'], self.config['DESIGN_NAME']))
-		self.config['OBJECTS_DIR'] = self.config.get('OBJECTS_DIR', path.join(self.config['FLOW_HOME'], 'objects', self.config['PLATFORM'], self.config['DESIGN_NAME']))
+
+		# Set defaults for generated directories
+		self.config['RESULTS_DIR'] = self.config.get('RESULTS_DIR', path.join(self.config['WORK_HOME'], 'results', self.config['PLATFORM'], self.config['DESIGN_NAME']))
+		self.config['LOG_DIR'] = self.config.get('LOG_DIR', path.join(self.config['WORK_HOME'], 'logs', self.config['PLATFORM'], self.config['DESIGN_NAME']))
+		self.config['REPORTS_DIR'] = self.config.get('REPORTS_DIR', path.join(self.config['WORK_HOME'], 'reports', self.config['PLATFORM'], self.config['DESIGN_NAME']))
+		self.config['OBJECTS_DIR'] = self.config.get('OBJECTS_DIR', path.join(self.config['WORK_HOME'], 'objects', self.config['PLATFORM'], self.config['DESIGN_NAME']))
 
 	def get_env(self, init_env: Optional[dict]):
 		env = {**init_env} if init_env is not None else {**self.config}

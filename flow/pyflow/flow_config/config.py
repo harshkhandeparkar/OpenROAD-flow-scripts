@@ -4,19 +4,19 @@ from .common_config import FlowCommonConfigDict, FlowCommonConfig
 from .platform_config import FlowPlatformConfigDict, FlowPlatformConfig
 from .design_config import FlowDesignConfigDict, FlowDesignConfig
 
-_FlowConfigDict = Union[FlowCommonConfigDict, FlowPlatformConfigDict, FlowDesignConfigDict]
+FlowConfigDict = Union[FlowCommonConfigDict, FlowPlatformConfigDict, FlowDesignConfigDict]
 
 class FlowConfig():
-	config: _FlowConfigDict
+	config: FlowConfigDict
 
-	def __init__(self, configopts: Union[_FlowConfigDict, dict]):
+	def __init__(self, configopts: Union[FlowConfigDict, dict]):
 		self.config = configopts
 
 		FlowCommonConfig.__init__(self, self.config)
 		FlowPlatformConfig.__init__(self, self.config)
 		FlowDesignConfig.__init__(self, self.config)
 
-	def get(self, key):
+	def get(self, key: str):
 		return self.config[key]
 
 	def set(self, key, value):
