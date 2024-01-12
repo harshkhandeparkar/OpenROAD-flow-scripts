@@ -1,13 +1,18 @@
-from typing import TypedDict
+from typing import TypedDict, Union, Any
 from os import path
 
 from .flow_config import FlowConfig, FlowConfigDict
 from .flow_steps import preprocess, synth, floorplan
 
+class ParameterSweepDict(TypedDict):
+	start: float
+	end: float
+	step: float
+
 class Module(TypedDict):
 	name: str
-	parameters: list[dict]
-	flow_config: list[dict]
+	parameters: dict[str, Union[ParameterSweepDict, list[Any], Any]]
+	flow_config: dict[str, Union[ParameterSweepDict, list[Any], Any]]
 
 class FlowRunner:
 	global_flow_config: FlowConfig
