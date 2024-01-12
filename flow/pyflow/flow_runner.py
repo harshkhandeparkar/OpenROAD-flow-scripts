@@ -1,5 +1,6 @@
 from typing import TypedDict, Union, Any
 from os import path
+from shutil import rmtree
 
 from .flow_config import FlowConfig, FlowConfigDict
 from .flow_steps import preprocess, synth, floorplan
@@ -31,3 +32,6 @@ class FlowRunner:
 		self.global_flow_config = preprocess(self.global_flow_config)
 		synth(self.global_flow_config)
 		floorplan(self.global_flow_config)
+
+	def clean_runs(self):
+		rmtree(self.global_flow_config.get('WORK_HOME'))
