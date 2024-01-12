@@ -5,6 +5,8 @@ class __FlowConfigDirectories(TypedDict):
 	"""The flow directories."""
 	FLOW_HOME: str
 	"""The home directory for the flow scripts. Default: `.`"""
+	WORK_HOME: str
+	"""The directory in which all the outputs are generated."""
 	DESIGN_HOME: str
 	"""The directory in which all design files are stored. Default: `[flow_home]/designs/`"""
 	DESIGN_DIR: str
@@ -45,6 +47,7 @@ FlowCommonConfigDict = Union[__FlowConfigDirectories, __FlowConfigTools]
 
 FLOW_COMMON_CONFIG_DEFAULTS: FlowCommonConfigDict = {
 	'FLOW_HOME': path.abspath('.'),
+	'WORK_HOME': path.abspath('.'),
 	'YOSYS_CMD': '/usr/bin/yosys',
 	'OPENROAD_EXE': '/usr/bin/openroad',
 	'KLAYOUT_CMD': '/usr/bin/klayout',
@@ -71,3 +74,5 @@ class FlowCommonConfig:
 
 	def get_env(self, init_env: Optional[dict]):
 		env = {**init_env} if init_env is not None else {**self.config}
+
+		return env
