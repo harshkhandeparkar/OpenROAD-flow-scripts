@@ -47,10 +47,12 @@ FLOW_DESIGN_CONFIG_DEFAULTS: FlowDesignConfigDict = {
 }
 
 class FlowDesignConfig:
+	configopts: Union[FlowDesignConfigDict, dict]
 	config: FlowDesignConfigDict
 
-	def __init__(self, configopts: Union[FlowDesignConfigDict, dict]):
-		self.config = {**FLOW_DESIGN_CONFIG_DEFAULTS, **configopts}
+	def __init__(self):
+		# self.configopts = configopts.copy()
+		self.config = {**FLOW_DESIGN_CONFIG_DEFAULTS, **self.config}
 
 		self.config['SDC_FILE'] = self.config.get('SDC_FILE', path.join(self.config['DESIGN_DIR'], 'constraint.sdc'))
 

@@ -15,11 +15,12 @@ class FlowRunner:
 	work_home: str
 
 	def __init__(self, global_flow_config: FlowConfigDict, modules: list[Module]):
-		if 'WORK_HOME' not in global_flow_config:
-			global_flow_config['WORK_HOME'] = self.work_home = path.abspath(path.join('.', 'runs', global_flow_config['DESIGN_NAME']))
-
 		self.global_flow_config = FlowConfig(global_flow_config)
 		self.modules = modules
+
+		if 'WORK_HOME' not in global_flow_config:
+			self.work_home = path.abspath(path.join('.', 'runs', global_flow_config['DESIGN_NAME']))
+			self.global_flow_config.set('WORK_HOME', self.work_home)
 
 	def run_flow(self):
 		self.global_flow_config = preprocess(self.global_flow_config)

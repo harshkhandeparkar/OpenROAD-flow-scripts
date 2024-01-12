@@ -6,21 +6,28 @@ from .design_config import FlowDesignConfigDict, FlowDesignConfig
 
 FlowConfigDict = Union[FlowCommonConfigDict, FlowPlatformConfigDict, FlowDesignConfigDict]
 
-class FlowConfig():
+class FlowConfig(FlowCommonConfig, FlowPlatformConfig, FlowDesignConfig):
+	configopts: Union[FlowConfigDict, dict]
 	config: FlowConfigDict
 
 	def __init__(self, configopts: Union[FlowConfigDict, dict]):
-		self.config = configopts
+		self.configopts = configopts.copy()
+		self.config = configopts.copy()
 
-		FlowCommonConfig.__init__(self, self.config)
-		FlowPlatformConfig.__init__(self, self.config)
-		FlowDesignConfig.__init__(self, self.config)
+		FlowCommonConfig.__init__(self)
+		FlowPlatformConfig.__init__(self)
+		FlowDesignConfig.__init__(self)
 
 	def get(self, key: str):
-		return self.config[key]
+		if key in self.config:
+			return self.config[key]
+		else:
+			return None
 
 	def set(self, key, value):
 		self.config[key] = value
+
+		self.calculate_dirs()
 
 	def get_env(self):
 		"""Returns the corresponding environment variables for the given configuration."""

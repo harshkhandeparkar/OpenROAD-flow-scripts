@@ -75,10 +75,11 @@ FLOW_PLATFORM_CONFIG_DEFAULTS: FlowPlatformConfigDict = {
 }
 
 class FlowPlatformConfig:
+	configopts: Union[FlowPlatformConfigDict, dict]
 	config: FlowPlatformConfigDict
 
-	def __init__(self, configopts: Union[FlowPlatformConfigDict, dict]):
-		self.config = {**FLOW_PLATFORM_CONFIG_DEFAULTS, **configopts}
+	def __init__(self):
+		self.config = {**FLOW_PLATFORM_CONFIG_DEFAULTS, **self.config}
 
 		self.config['PDN_TCL'] = self.config.get('PDN_TCL', path.join(self.config['PLATFORM_DIR'], 'pdn.tcl'))
 		self.config['TAPCELL_TCL'] = self.config.get('TAPCELL_TCL', path.join(self.config['PLATFORM_DIR'], 'tapcell.tcl'))
