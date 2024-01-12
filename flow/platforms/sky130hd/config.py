@@ -2,11 +2,11 @@ from os import path
 import sys
 sys.path.append('../../pyflow')
 
-from pyflow.config import FlowPlatformConfig
+from pyflow.flow_config import FlowPlatformConfigDict
 
 PLATFORM_DIR = path.dirname(__file__)
 
-SKY130HD_PLATFORM_CONFIG: FlowPlatformConfig = {
+SKY130HD_PLATFORM_CONFIG: FlowPlatformConfigDict = {
 	# General configuration
 	'PROCESS': 130,
 	'TECH_LEF': path.join(PLATFORM_DIR, 'lef', 'sky130_fd_sc_hd.tlef'),

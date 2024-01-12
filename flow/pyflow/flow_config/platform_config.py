@@ -1,4 +1,5 @@
-from typing import TypedDict, Union
+from typing import TypedDict, Union, Optional
+from os import path
 
 class __PlatformCommonConfig(TypedDict):
 	"""The common platform configuration."""
@@ -64,4 +65,36 @@ class __PlatformFloorplanConfig(TypedDict):
 	MACRO_PLACE_CHANNEL: tuple[float, float]
 	"""Horizontal/vertical channel width between macros (microns). Used by automatic macro placement when `RTLMP_FLOW` is disabled."""
 
-FlowPlatformConfig = Union[__PlatformCommonConfig, __PlatformSynthConfig, __PlatformFloorplanConfig]
+FlowPlatformConfigDict = Union[__PlatformCommonConfig, __PlatformSynthConfig, __PlatformFloorplanConfig]
+
+FLOW_PLATFORM_CONFIG_DEFAULTS: FlowPlatformConfigDict = {
+	'DONT_USE_CELLS': [],
+	'DONT_USE_LIBS': [],
+	'DONT_USE_SC_LIB': [],
+	'FILL_CELLS': []
+}
+
+class FlowPlatformConfig:
+	config: FlowPlatformConfigDict
+
+	def __init__(self, configopts: Union[FlowPlatformConfigDict, dict]):
+		self.config = {**FLOW_PLATFORM_CONFIG_DEFAULTS, **configopts}
+
+		self.config['PDN_TCL'] = self.config.get('PDN_TCL', path.join(self.config['PLATFORM_DIR'], 'pdn.tcl'))
+		self.config['TAPCELL_TCL'] = self.config.get('TAPCELL_TCL', path.join(self.config['PLATFORM_DIR'], 'tapcell.tcl'))
+
+	def get_env(self, init_env: Optional[dict]):
+		env = {**init_env} if init_env is not None else {**self.config}
+
+		for key in ('LIB_FILES', 'GDS_FILES', 'DONT_USE_CELLS', 'DONT_USE_LIBS', 'DONT_USE_SC_LIB', 'FILL_CELLS', 'TIEHI_CELL_AND_PORT', 'TIELO_CELL_AND_PORT', 'MIN_BUF_CELL_AND_PORTS', ):
+			if key in self.config:
+				env[key] = ' '.join(self.config[key])
+
+		for key in ('ABC_LOAD_IN_FF', 'PROCESS'):
+			if key in self.config:
+				env[key] = str(self.config[key])
+
+		for key in ('MACRO_PLACE_HALO', 'MACRO_PLACE_CHANNEL'):
+			env[key] = f"{self.config[key][0]} {self.config[key][1]}"
+
+		return env

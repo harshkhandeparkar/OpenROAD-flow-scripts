@@ -3,7 +3,7 @@ from shutil import copyfile
 import re
 
 from .call_tool import call_yosys_script, call_util_script, do_openroad_step
-from .config.config import FlowConfig
+from .flow_config import FlowConfig
 
 def preprocess(config: FlowConfig):
 	print("STARTING PREPROCESSING.")
