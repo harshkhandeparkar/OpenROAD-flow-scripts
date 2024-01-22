@@ -35,11 +35,6 @@ gcd_runner = PPARunner(
 			'name': 'RegRst_0x9f365fdf6c8998a',
 			'flow_config': {},
 			'parameters': {}
-		},
-		{
-			'name': 'gcd',
-			'flow_config': {},
-			'parameters': {}
 		}
 	]
 )

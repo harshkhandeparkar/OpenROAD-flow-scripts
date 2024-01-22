@@ -42,7 +42,9 @@ class PPARunner:
 				rmtree(module_work_home)
 
 			module_config = preprocess(module_config)
-			synth(module_config)
+			stats = synth(module_config)
+
+			print(stats)
 
 	def clean_runs(self):
 		rmtree(self.global_flow_config.get('WORK_HOME'))

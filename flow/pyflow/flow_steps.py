@@ -2,7 +2,10 @@ from os import makedirs, path
 from shutil import copyfile
 import re
 
-from .call_tool import call_yosys_script, call_util_script, do_openroad_step
+from .tools.yosys import call_yosys_script, parse_yosys_synth_stats
+from .tools.utils import call_util_script
+from .tools.openroad import do_openroad_step
+
 from .flow_config import FlowConfig
 
 def preprocess(config: FlowConfig):
@@ -63,6 +66,11 @@ def synth(config: FlowConfig):
 	copyfile(config.get('SDC_FILE'), path.join(config.get('RESULTS_DIR'), '1_synth.sdc'))
 
 	print("SYNTHESIS COMPLETED SUCCESFULLY.")
+
+	with open(path.join(config.get('REPORTS_DIR'), 'synth_stat.txt')) as statsfile:
+		stats = parse_yosys_synth_stats(statsfile.read())
+
+		return stats
 
 def floorplan(config: FlowConfig):
 	print("STARTING FLOORPLANNING.")
