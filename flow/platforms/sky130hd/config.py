@@ -2,7 +2,7 @@ from os import path
 import sys
 sys.path.append('../../pyflow')
 
-from pyflow.flow_config import FlowPlatformConfigDict
+from pyflow.flow import FlowPlatformConfigDict
 
 PLATFORM_DIR = path.dirname(__file__)
 

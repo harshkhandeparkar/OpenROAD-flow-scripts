@@ -2,8 +2,7 @@ from typing import TypedDict, Union, Any, Optional
 from os import path
 from shutil import rmtree
 
-from .flow_config import FlowConfig, FlowConfigDict
-from .flow_steps import preprocess, synth
+from .flow import FlowRunner, FlowConfigDict
 from .tools.yosys import SynthStats
 
 class ParameterSweepDict(TypedDict):
@@ -47,7 +46,7 @@ class PPARunner:
 			print(f"Running flow for module {module['name']}")
 
 			module_work_home = path.join(self.work_home, module['name'])
-			module_config: FlowConfig = FlowConfig({
+			module_runner: FlowRunner = FlowRunner({
 				**self.global_flow_config,
 				'DESIGN_NAME': module['name'],
 				'WORK_HOME': module_work_home
@@ -56,8 +55,8 @@ class PPARunner:
 			if path.exists(module_work_home):
 				rmtree(module_work_home)
 
-			module_config = preprocess(module_config)
-			synth_stats = synth(module_config)
+			module_runner.preprocess()
+			synth_stats = module_runner.synthesis()
 
 			self.runs[module['name']].append({
 				'run_dir': module_work_home,

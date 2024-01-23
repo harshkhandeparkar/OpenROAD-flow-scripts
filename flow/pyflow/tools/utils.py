@@ -1,11 +1,10 @@
 from os import path
-from pyflow.flow_config import FlowConfig
 from . import __call_tool
 
-def call_util_script(script: str, config: FlowConfig, args: list[str]):
+def call_util_script(script: str, args: list[str], utils_dir: str, env: dict[str, str]):
 	__call_tool(
-		path.join(config.get('UTILS_DIR'), script),
+		path.join(utils_dir, script),
 		args,
-		config.get_env(),
+		env,
 		None
 	)

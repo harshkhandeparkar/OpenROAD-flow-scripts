@@ -1,19 +1,30 @@
 from os import path
 import re
 from typing import TypedDict, Optional, Callable
-from pyflow.flow_config import FlowConfig
 from . import __call_tool
 
-def __call_yosys(args: list[str], logfile: str, config: FlowConfig):
+def __call_yosys(
+	args: list[str],
+	logfile: str,
+	env: dict[str, str],
+	yosys_cmd: str
+):
 	__call_tool(
-		tool=config.get('YOSYS_CMD'),
+		tool=yosys_cmd,
 		args=['-v', '3', *args],
-		env=config.get_env(),
+		env=env,
 		logfile=logfile
 	)
 
-def call_yosys_script(script: str, args: list[str], logfile: str, config: FlowConfig):
-	__call_yosys(["-c", path.join(config.get('SCRIPTS_DIR'), f'{script}.tcl'), *args], logfile, config=config)
+def call_yosys_script(
+	script: str,
+	args: list[str],
+	logfile: str,
+	scripts_dir: str,
+	env: dict[str, str],
+	yosys_cmd: str
+):
+	__call_yosys(["-c", path.join(scripts_dir, f'{script}.tcl'), *args], logfile, env, yosys_cmd)
 
 class SynthStats(TypedDict):
 	num_wires: int
