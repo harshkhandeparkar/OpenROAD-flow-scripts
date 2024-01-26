@@ -3,6 +3,7 @@ from typing import Union
 from os import makedirs, path
 from shutil import copyfile
 import re
+import json
 
 from ..tools.yosys import call_yosys_script, parse_yosys_synth_stats
 from ..tools.utils import call_util_script
@@ -108,8 +109,9 @@ class FlowRunner(FlowCommonConfig, FlowPlatformConfig, FlowDesignConfig):
 
 		print("SYNTHESIS COMPLETED SUCCESFULLY.")
 
-		with open(path.join(self.get('REPORTS_DIR'), 'synth_stat.txt')) as statsfile:
-			stats = parse_yosys_synth_stats(statsfile.read())
+		with open(path.join(self.get('REPORTS_DIR'), 'synth_stat.json')) as statsfile:
+			stats_json = json.loads(statsfile.read())
+			stats = parse_yosys_synth_stats(stats_json)
 
 			return stats
 

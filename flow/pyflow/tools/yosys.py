@@ -1,4 +1,5 @@
 from os import path
+import json
 import re
 from typing import TypedDict, Optional, Callable
 from . import __call_tool
@@ -37,47 +38,18 @@ class SynthStats(TypedDict):
 	cell_counts: dict[str, int]
 	module_area: float
 
-def __find_yosys_synth_stats_value(stats_text: str, keyword: str, parser: Callable = int) -> Optional[str]:
-	captures = re.findall(f"{keyword}\s*(\d+)", stats_text)
-	if len(captures) > 0:
-		try:
-			return parser(captures[0])
-		except:
-			print(f'Error parsing the synthesis statistic: {keyword}')
-			return None
-	else:
-		print(f'The synthesis statistic {keyword} not found.')
-		return None
-
-def parse_yosys_synth_stats(stats_text: str) -> SynthStats:
+def parse_yosys_synth_stats(stats_json: dict) -> SynthStats:
 	stats: SynthStats = {}
 
-	stats['num_wires'] = __find_yosys_synth_stats_value(stats_text, 'Number of wires:')
-	stats['num_wire_bits'] = __find_yosys_synth_stats_value(stats_text, 'Number of wire bits:')
-	stats['num_public_wires'] = __find_yosys_synth_stats_value(stats_text, 'Number of public wires:')
-	stats['num_public_wire_bits'] = __find_yosys_synth_stats_value(stats_text, 'Number of public wire bits:')
-	stats['num_memories'] = __find_yosys_synth_stats_value(stats_text, 'Number of memories:')
-	stats['num_memory_bits'] = __find_yosys_synth_stats_value(stats_text, 'Number of memory bits:')
-	stats['num_processes'] = __find_yosys_synth_stats_value(stats_text, 'Number of processes:')
-	stats['num_cells'] = __find_yosys_synth_stats_value(stats_text, 'Number of cells:')
-
-	# Finding module area
-	for line in stats_text.splitlines():
-		if line.lower().find("chip area for module ") != -1:
-			stats['module_area'] = float(line.strip().split(':')[1].strip())
-
-	# Finding module/cell wise chip area
-	parse_cell_count = False
-	stats['cell_counts'] = {}
-	for line in stats_text.strip().splitlines():
-		if parse_cell_count and (line.isspace() or len(line) == 0):
-			parse_cell_count = False
-			break
-		elif parse_cell_count:
-			parsed = line.strip().split()
-			if len(parsed) > 1:
-				stats['cell_counts'][parsed[0]] = int(parsed[1])
-		elif line.lower().find("number of cells:") != -1:
-			parse_cell_count = True
+	stats['num_wires'] = stats_json['design']['num_wires']
+	stats['num_wire_bits'] = stats_json['design']['num_wire_bits']
+	stats['num_public_wires'] = stats_json['design']['num_pub_wires']
+	stats['num_public_wire_bits'] = stats_json['design']['num_pub_wire_bits']
+	stats['num_memories'] = stats_json['design']['num_memories']
+	stats['num_memory_bits'] = stats_json['design']['num_memory_bits']
+	stats['num_processes'] = stats_json['design']['num_processes']
+	stats['num_cells'] = stats_json['design']['num_cells']
+	stats['module_area'] = stats_json['design']['area']
+	stats['cell_counts'] = stats_json['design']['num_cells_by_type']
 
 	return stats

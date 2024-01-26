@@ -71,6 +71,7 @@ class PPARunner:
 
 		module_runner.preprocess()
 		synth_stats = module_runner.synthesis()
+		module_runner.floorplan()
 
 		return {
 			'name': module_runner.get('DESIGN_NAME'),
