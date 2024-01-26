@@ -52,9 +52,16 @@ class FlowRunner(FlowCommonConfig, FlowPlatformConfig, FlowDesignConfig):
 	def preprocess(self):
 		print("STARTING PREPROCESSING.")
 
-		# Mark libraries as dont use
+		# Create output directories
 		makedirs(path.join(self.get('OBJECTS_DIR'), 'lib'), exist_ok = True)
+		makedirs(self.get('RESULTS_DIR'), exist_ok = True)
+		makedirs(self.get('REPORTS_DIR'), exist_ok = True)
+		makedirs(self.get('LOG_DIR'), exist_ok = True)
+		PREPROC_LOG_FILE = path.join(self.get('LOG_DIR'), '0_preprocess.log')
+
+		# Mark libraries as dont use
 		dont_use_libs = []
+
 
 		for libfile in self.get('LIB_FILES'):
 			output_file = path.join(self.get('OBJECTS_DIR'), 'lib', path.basename(libfile))
@@ -66,7 +73,8 @@ class FlowRunner(FlowCommonConfig, FlowPlatformConfig, FlowDesignConfig):
 					'-o', output_file
 				],
 				self.get('UTILS_DIR'),
-				self.get_env()
+				self.get_env(),
+				PREPROC_LOG_FILE
 			)
 
 			dont_use_libs.append(output_file)
@@ -86,10 +94,6 @@ class FlowRunner(FlowCommonConfig, FlowPlatformConfig, FlowDesignConfig):
 
 	def synthesis(self):
 		print("STARTING SYNTHESIS.")
-
-		makedirs(self.get('RESULTS_DIR'), exist_ok = True)
-		makedirs(self.get('REPORTS_DIR'), exist_ok = True)
-		makedirs(self.get('LOG_DIR'), exist_ok = True)
 
 		SYNTH_OUTPUT_FILE = path.join(self.get('RESULTS_DIR'), '1_1_yosys.v')
 		SYNTH_LOG_FILE = path.join(self.get('LOG_DIR'), '1_1_yosys.log')
