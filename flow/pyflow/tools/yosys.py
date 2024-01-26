@@ -1,7 +1,5 @@
 from os import path
-import json
-import re
-from typing import TypedDict, Optional, Callable
+from typing import TypedDict
 from . import __call_tool
 
 def __call_yosys(
