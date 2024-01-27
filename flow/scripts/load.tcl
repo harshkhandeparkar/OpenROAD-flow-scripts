@@ -32,10 +32,14 @@ proc load_design {design_file sdc_file msg} {
   } else {
     puts $msg
   }
+
+  source $::env(SCRIPTS_DIR)/write_ref_sdc.tcl
+  write_updated_sdc "1_synth"
+
 }
 
 #===========================================================================================
-# Routines to run equivalence tests when they are enabled. 
+# Routines to run equivalence tests when they are enabled.
 
 proc get_verilog_cells_for_design { } {
     set dir "$::env(PLATFORM_DIR)/work_around_yosys/"
@@ -44,7 +48,7 @@ proc get_verilog_cells_for_design { } {
 
 proc write_eqy_verilog {filename} {
     # Filter out cells with no verilog/not needed for equivalence such
-    # as fillers and tap cells 
+    # as fillers and tap cells
     if {[info exist ::env(REMOVE_CELLS_FOR_EQY)]} {
 	write_verilog -remove_cells $::env(REMOVE_CELLS_FOR_EQY) $::env(RESULTS_DIR)/$filename
     } else {
@@ -87,7 +91,7 @@ proc write_eqy_script { } {
     # Gold netlist
     puts $outfile "\[gold]\nread_verilog -sv $::env(RESULTS_DIR)/4_before_rsz.v $cell_files\n"
     puts $outfile "prep -top $top_cell -flatten\nmemory_map\n\n"
-    # Modified netlist 
+    # Modified netlist
     puts $outfile "\[gate]\nread_verilog -sv $::env(RESULTS_DIR)/4_after_rsz.v $cell_files\n"
     puts $outfile "prep -top $top_cell -flatten\nmemory_map\n\n"
 

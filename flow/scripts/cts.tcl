@@ -124,6 +124,9 @@ if { [info exists ::env(POST_CTS_TCL)] } {
   source $::env(POST_CTS_TCL)
 }
 
+source [file join $env(SCRIPTS_DIR) "write_ref_sdc.tcl"]
+write_updated_sdc "4_cts"
+
 if {![info exists save_checkpoint] || $save_checkpoint} {
   if {[info exists ::env(GALLERY_REPORT)]  && $::env(GALLERY_REPORT) != 0} {
       write_def $::env(RESULTS_DIR)/4_1_cts.def

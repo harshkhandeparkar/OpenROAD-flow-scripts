@@ -166,3 +166,6 @@ if {![info exists save_checkpoint] || $save_checkpoint} {
   write_db $::env(RESULTS_DIR)/2_1_floorplan.odb
   write_sdc $::env(RESULTS_DIR)/2_floorplan.sdc
 }
+
+source $::env(SCRIPTS_DIR)/write_ref_sdc.tcl
+write_updated_sdc "2_floorplan"

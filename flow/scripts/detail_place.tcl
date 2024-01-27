@@ -25,6 +25,9 @@ estimate_parasitics -placement
 source $::env(SCRIPTS_DIR)/report_metrics.tcl
 report_metrics "detailed place" true false
 
+source [file join $env(SCRIPTS_DIR) "write_ref_sdc.tcl"]
+write_updated_sdc "3_place"
+
 if {![info exists save_checkpoint] || $save_checkpoint} {
   write_db $::env(RESULTS_DIR)/3_5_place_dp.odb
 }
