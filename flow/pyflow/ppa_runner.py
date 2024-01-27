@@ -5,6 +5,7 @@ from multiprocessing import Pool
 
 from .flow import FlowRunner, FlowConfigDict
 from .tools.yosys import SynthStats
+from .tools.openroad import FloorplanningStats
 
 class ParameterSweepDict(TypedDict):
 	start: float
@@ -20,6 +21,7 @@ class ModuleRun(TypedDict):
 	name: str
 	run_dir: str
 	synth_stats: SynthStats
+	floorplanning_stats: FloorplanningStats
 
 class PPARunner:
 	design_name: str
@@ -70,13 +72,15 @@ class PPARunner:
 			rmtree(module_work_home)
 
 		module_runner.preprocess()
+
 		synth_stats = module_runner.synthesis()
-		module_runner.floorplan()
+		fp_stats = module_runner.floorplan()
 
 		return {
 			'name': module_runner.get('DESIGN_NAME'),
 			'run_dir': module_work_home,
-			'synth_stats': synth_stats
+			'synth_stats': synth_stats,
+			'floorplanning_stats': fp_stats
 		}
 
 	def clean_runs(self):
@@ -100,3 +104,14 @@ class PPARunner:
 						print(f"		{stat}: {', '.join(formatted_cell_counts)}")
 					else:
 						print(f"		{stat}: {run['synth_stats'][stat]}")
+
+				for stat in run['floorplanning_stats']:
+					if stat == 'sta':
+						formatted_sta_results = []
+
+						for clk in run['floorplanning_stats']['sta'].values():
+							formatted_sta_results.append(f"{clk['clk_name']} (period: {clk['clk_period']}, slack: {clk['clk_slack']})")
+
+						print(f"		{stat}: {', '.join(formatted_sta_results)}")
+					else:
+						print(f"		{stat}: {run['floorplanning_stats'][stat]}")

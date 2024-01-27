@@ -5,9 +5,9 @@ from shutil import copyfile
 import re
 import json
 
-from ..tools.yosys import call_yosys_script, parse_yosys_synth_stats
+from ..tools.yosys import call_yosys_script, parse_yosys_synth_stats, SynthStats
 from ..tools.utils import call_util_script
-from ..tools.openroad import do_openroad_step
+from ..tools.openroad import do_openroad_step, parse_floorplanning_stats, FloorplanningStats
 
 from .common_config import FlowCommonConfigDict, FlowCommonConfig
 from .platform_config import FlowPlatformConfigDict, FlowPlatformConfig
@@ -92,7 +92,7 @@ class FlowRunner(FlowCommonConfig, FlowPlatformConfig, FlowDesignConfig):
 
 		print("PREPROCESSING COMPLETED SUCCESFULLY.")
 
-	def synthesis(self):
+	def synthesis(self) -> SynthStats:
 		print("STARTING SYNTHESIS.")
 
 		SYNTH_OUTPUT_FILE = path.join(self.get('RESULTS_DIR'), '1_1_yosys.v')
@@ -119,7 +119,7 @@ class FlowRunner(FlowCommonConfig, FlowPlatformConfig, FlowDesignConfig):
 
 			return stats
 
-	def floorplan(self):
+	def floorplan(self) -> FloorplanningStats:
 		print("STARTING FLOORPLANNING.")
 
 		makedirs(self.get('RESULTS_DIR'), exist_ok = True)
@@ -139,3 +139,6 @@ class FlowRunner(FlowCommonConfig, FlowPlatformConfig, FlowDesignConfig):
 		do_openroad_step('2_6_floorplan_pdn', 'pdn', self.get('SCRIPTS_DIR'), self.get('LOG_DIR'), self.get('OPENROAD_CMD'), self.get_env())
 
 		print("FLOORPLANNING COMPLETED SUCCESFULLY.")
+
+		with open(path.join(self.get('LOG_DIR'), '2_1_floorplan.log')) as logfile:
+			return parse_floorplanning_stats(log_txt=logfile.read())
